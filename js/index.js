@@ -157,7 +157,7 @@
 
         },
     }
-    var vm = new Vue();
+    var vm = new Vue(options);
     var main = new function(){
 
         this.touch ={
@@ -166,11 +166,20 @@
             limitUp:0,
             limitDown:undefined,
             overlimit:false,
-            StartY:0,
-            NewY:0,
-            addY:0,
+            lastX:0,
+            lastY:0,
+            newX:0,
+            newY:0,
+            delta_X:0,
+            delta_Y:0,
             scrollY:0,
-            touchAllow:true
+            touchAllow:true,
+            fingerNumber:0,
+            distance:0,
+            angle:0,
+            delta_angle:0,
+            time:0,
+            offsetTime:0,
         };
 
         this.bgm ={
