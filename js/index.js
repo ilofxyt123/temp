@@ -130,15 +130,25 @@
     var options = {
         el:"#iCreative",
         data:{
-
-
+            debug:true,
+            server_data:{},
 
             /*页面切换控制*/
-            p1:false,
-            p2:false,
-            pvideo:false,
-            prule:false,
-            hpwarn:false,//横屏提示
+            p1:{
+                visible:false,
+            },
+            p2:{
+                visible:false,
+            },
+            pvideo:{
+                visible:false,
+            },
+            prule:{
+                visible:false,
+            },
+            hpwarn:{
+                visible:false,
+            },
             /*页面切换控制*/
 
 
