@@ -36,10 +36,16 @@
         </div>
     </transition>
 
-    <div class="hp" v-show="hpwarn.visible">
+    <div class="hp" v-show="hpwarn.visible" style="display:none;">
         <div class="hp_box">
             <img src="images/phone.png" class="phone">
             <img src="images/weile.png" class="hp_tip">
+        </div>
+    </div>
+
+    <div class="container P_wait" v-show="pwait.visible" style="display:none;">
+        <div class="preloader-indicator-modal">
+            <span class="preloader preloader-white"></span>
         </div>
     </div>
 </div>

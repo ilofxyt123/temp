@@ -149,6 +149,9 @@
             hpwarn:{
                 visible:false,
             },
+            pwait:{
+                visible:false,
+            },
             /*页面切换控制*/
 
 
@@ -156,6 +159,7 @@
         methods:{
 
         },
+        delimiters: ['$[', ']']
     }
     var vm = new Vue(options);
     var main = new function(){

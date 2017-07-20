@@ -143,6 +143,7 @@ a, button, input {
 .ui-chrome-btn-disable{  -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */ filter: grayscale(100%);}
 
 /*迷你加载器*/
+.P_wait{z-index:1000;}
 .preloader-indicator-modal {
     width:1rem;
     height:1rem;
