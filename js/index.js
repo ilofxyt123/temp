@@ -351,11 +351,11 @@
         $(window).on("orientationchange",function(e){
             if(window.orientation == 0 || window.orientation == 180 )
             {
-                $(".hp").hide();
+                vm.hpwarn.visible = false;
             }
             else if(window.orientation == 90 || window.orientation == -90)
             {
-                $(".hp").show();
+                vm.hpwarn.visible = true;
             }
         });
     };

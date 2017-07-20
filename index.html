@@ -31,12 +31,12 @@
 
 
     <transition enter-active-class="ani-fadeIn" leave-active-class="ani-fadeOut">
-        <div class="container P_video animated" v-show="pvideo">
+        <div class="container P_video animated" v-show="pvideo.visible">
             <video src="video/video.mp4?v51" id="video" width="100%" x-webkit-airplay="true" webkit-playsinline playsinline airplay="allow" x5-video-player-type="h5" class="iosPreload"></video>
         </div>
     </transition>
 
-    <div class="hp none" v-show="hpwarn">
+    <div class="hp" v-show="hpwarn.visible">
         <div class="hp_box">
             <img src="images/phone.png" class="phone">
             <img src="images/weile.png" class="hp_tip">
