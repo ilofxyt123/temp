@@ -1,195 +1,270 @@
+var onJQAnimationEndHandle = function( option ){
+    switch( option.type ){
+        case "fadeIn":
+            this.removeClass("opacity "+option.ani);
+            break;
+        case "fadeOut":
+            this.hide().removeClass(option.ani);
+            break;
+    }
+    if(option.callback){
+        option.callback.call(this);
+    };
+    this.off("webkitAnimationEnd").css({
+        animationDuration:""
+    });
+};
 $.fn.extend({
-        fiHandler:function(e){
-            e.stopPropagation();
-            this.removeClass("opacity "+this.tp.cls);
-            if(this.tp.cb){this.tp.cb();};
-            this.off("webkitAnimationEnd");
-            this.tp.cb = undefined;
-            this.tp.duration = this.tp.cls = "";
-        },
-        foHandler:function(e){
-            e.stopPropagation();
-            this.addClass("none").removeClass(this.tp.cls);
-            if(this.tp.cb){this.tp.cb();};
-            this.off("webkitAnimationEnd");
-            this.tp.cb = undefined;
-            this.tp.duration = this.tp.cls = "";
-        },
-        fi:function(cb){
-            this.tp = {
-                cb:undefined,
-                duration:"",
-                cls:"",
-            };
-            this.tp.cls = "ani-fadeIn";
-            if(arguments){
-                for(var prop in arguments){
-                    switch(typeof arguments[prop]){
-                        case "function":
-                            this.tp.cb = arguments[prop];
-                            break;
-                        case "number":
-                            this.tp.duration = arguments[prop];
-                            this.tp.cls += this.tp.duration;
-                            break;
-                    }
-                }
-            }
-            this.on("webkitAnimationEnd", this.fiHandler.bind(this)).addClass("opacity " + this.tp.cls).removeClass("none");
-            return this;
-        },
-        fo:function(cb){
-            this.tp = {
-                cb:undefined,
-                duration:"",
-                cls:"",
-            };
-            this.tp.cls = "ani-fadeOut";
-            if(arguments){
-                for(var prop in arguments){
-                    switch(typeof arguments[prop]){
-                        case "function":
-                            this.tp.cb = arguments[prop];
-                            break;
-                        case "number":
-                            this.tp.duration = arguments[prop];
-                            this.tp.cls += this.tp.duration;
-                    }
-                }
-            }
-            this.on("webkitAnimationEnd",this.foHandler.bind(this)).addClass(this.tp.cls);
-            return this;
-        }
-    });    
-var Utils = new function(){
-            this.preloadImage = function(ImageURL,callback,realLoading){
-                var rd = realLoading||false;
-                var i,j,haveLoaded = 0;
-                var $num = $(".num");
-                for(i = 0,j = ImageURL.length;i<j;i++){
-                    (function(img, src) {
-                        img.onload = function() {
-                            haveLoaded+=1;
-                            var num = Math.ceil(haveLoaded / ImageURL.length* 100);
-                            if(rd){
-                                $num.html("- "+num + "% -");
-                            }
-                            if (haveLoaded == ImageURL.length && callback) {
-                                setTimeout(callback, 500);
-                            }
-                        };
-                        img.onerror = function() {};
-                        img.onabort = function() {};
-
-                        img.src = src;
-                    }(new Image(), ImageURL[i]));
-                }
-            },//图片列表,图片加载完后回调函数，是否需要显示百分比
-            this.lazyLoad = function(){
-                var a = $(".lazy");
-                var len = a.length;
-                var imgObj;
-                var Load = function(){
-                    for(var i=0;i<len;i++){
-                        imgObj = a.eq(i);
-                        imgObj.attr("src",imgObj.attr("data-src"));
-                    }
-                };
-                Load();
-            };//将页面中带有.lazy类的图片进行加载
-            this.browser = function(t){
-                var u = navigator.userAgent;
-                var u2 = navigator.userAgent.toLowerCase();
-                var p = navigator.platform;
-                var browserInfo = {
-                    trident: u.indexOf('Trident') > -1, //IE内核
-                    presto: u.indexOf('Presto') > -1, //opera内核
-                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
-                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
-                    iPad: u.indexOf('iPad') > -1, //是否iPad
-                    webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
-                    iosv: u.substr(u.indexOf('iPhone OS') + 9, 3),
-                    weixin: u2.match(/MicroMessenger/i) == "micromessenger",
-                    taobao: u.indexOf('AliApp(TB') > -1,
-                    win: p.indexOf("Win") == 0,
-                    mac: p.indexOf("Mac") == 0,
-                    xll: (p == "X11") || (p.indexOf("Linux") == 0),
-                    ipad: (navigator.userAgent.match(/iPad/i) != null) ? true : false
-                };
-                return browserInfo[t];
-            };//获取浏览器信息
-            this.g=function(id){
-                return document.getElementById(id);
-            };
-            this.limitNum=function(obj){//限制11位手机号
-                var value = $(obj).val();
-                var length = value.length;
-                //假设长度限制为10
-                if(length>11){
-                    //截取前10个字符
-                    value = value.substring(0,11);
-                    $(obj).val(value);
-                }
-            };
+    fi:function(option){
+        var _this = this;
+        var options = {
+            ani:"ani-fadeIn",
+            duration:"500",
+            callback:undefined,
+            type:"fadeIn"
         };
-var Media = new function(){
-        this.mutedEnd = false;
-        this.WxMediaInit=function(){
+        if(option){
+            jQuery.extend(options,option);
+        }
+        this.on("webkitAnimationEnd", function( e ){
+            e.stopPropagation();
+            onJQAnimationEndHandle.call(_this,options)
+        }).css({
+            animationDuration:options.duration+"ms",
+        }).addClass("opacity " + options.ani).show();
+        return this;
+    },
+    fo:function(option){
+        var _this = this;
+        var options = {
+            ani:"ani-fadeOut",
+            duration:"500",
+            callback:undefined,
+            type:"fadeOut"
+        };
+        if(option){
+            jQuery.extend(options,option);
+        }
+        this.on("webkitAnimationEnd",function( e ){
+            e.stopPropagation();
+            onJQAnimationEndHandle.call(_this,options)
+        }).css({
+            animationDuration:options.duration+"ms",
+        }).addClass(options.ani);
+        return this;
+    }
+});
+if ( Object.assign === undefined ) {
 
-            var _self = this;
-            if(!Utils.browser("weixin")){
-                this.mutedEnd = true;
-                return;
+    // Missing in IE
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+
+    ( function () {
+
+        Object.assign = function ( target ) {
+
+            'use strict';
+
+            if ( target === undefined || target === null ) {
+
+                throw new TypeError( 'Cannot convert undefined or null to object' );
+
             }
-            if(!Utils.browser("iPhone")){
-                _self.mutedEnd = true;
-                return;
-            }
-            document.addEventListener("WeixinJSBridgeReady",function(){
-                var $media = $(".iosPreload");
-                $.each($media,function(index,value){
-                    _self.MutedPlay(value["id"]);
-                    if(index+1==$media.length){
-                        _self.mutedEnd = true;
+
+            var output = Object( target );
+
+            for ( var index = 1; index < arguments.length; index ++ ) {
+
+                var source = arguments[ index ];
+
+                if ( source !== undefined && source !== null ) {
+
+                    for ( var nextKey in source ) {
+
+                        if ( Object.prototype.hasOwnProperty.call( source, nextKey ) ) {
+
+                            output[ nextKey ] = source[ nextKey ];
+
+                        }
+
                     }
-                });
-            },false)
-        },
-        this.MutedPlay=function(string){
-            var str = string.split(",");//id数组
-            var f = function(id){
-                var media = Utils.g(id);
-                media.volume = 0;
-                media.play();
-                // setTimeout(function(){
-                media.pause();
-                media.volume = 1;
-                media.currentTime = 0;
-                // },100)
-            };
-            if(!(str.length-1)){
-                f(str[0]);
-                return 0;
-            }
-            str.forEach(function(value,index){
-                f(value);
-            })
-        },
-        this.playMedia=function(id){
-            var _self = this;
-            var clock = setInterval(function(){
-                if(_self.mutedEnd){
-                    Utils.g(id).play()
-                    clearInterval(clock);
+
                 }
-            },20)
+
+            }
+
+            return output;
+
+        };
+
+    } )();
+
+}
+var Utils = new function(){
+    this.ImageLoader = function ImageLoader(){
+        this.total = 0;
+        this.haveload = 0;
+        this.percent = 0;
+        this.complete = false;
+        this.version = "?v1";
+    };
+    this.lazyLoad = function(){
+        var a = $(".lazy");
+        var len = a.length;
+        var imgObj;
+        var Load = function(){
+            for(var i=0;i<len;i++){
+                imgObj = a.eq(i);
+                imgObj.attr("src",imgObj.attr("data-src"));
+            }
+        };
+        Load();
+    };//将页面中带有.lazy类的图片进行加载
+    this.browser = function(t){
+        var u = navigator.userAgent;
+        var u2 = navigator.userAgent.toLowerCase();
+        var p = navigator.platform;
+        var browserInfo = {
+            trident: u.indexOf('Trident') > -1, //IE内核
+            presto: u.indexOf('Presto') > -1, //opera内核
+            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+            iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+            iPad: u.indexOf('iPad') > -1, //是否iPad
+            webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+            iosv: u.substr(u.indexOf('iPhone OS') + 9, 3),
+            weixin: u2.match(/MicroMessenger/i) == "micromessenger",
+            taobao: u.indexOf('AliApp(TB') > -1,
+            win: p.indexOf("Win") == 0,
+            mac: p.indexOf("Mac") == 0,
+            xll: (p == "X11") || (p.indexOf("Linux") == 0),
+            ipad: (navigator.userAgent.match(/iPad/i) != null) ? true : false
+        };
+        return browserInfo[t];
+    };//获取浏览器信息
+    this.g=function(id){
+        return document.getElementById(id);
+    };
+    this.limitNum=function(obj){//限制11位手机号
+        var value = $(obj).val();
+        var length = value.length;
+        //假设长度限制为10
+        if(length>11){
+            //截取前10个字符
+            value = value.substring(0,11);
+            $(obj).val(value);
         }
     };
+};
+Object.assign( Utils.ImageLoader.prototype,{
+
+    load: function( urls, onEveryLoad, onComplete){
+        var result = {
+            0:[]
+        };
+
+        this.total = urls.length;
+
+        var _this = this;
+
+        start();
+
+        function onLoad( e ){
+
+            if( Object.prototype.hasOwnProperty.call( urls[_this.haveload], "group" ) ){
+                var group = urls[_this.haveload].group;
+                if(result[group] instanceof Array == false){
+                    result[group] = [];
+                }
+                result[group].push(this)
+            }else{
+                result[0].push( this );
+            }
+
+            _this.haveload++;
+            _this.percent = Math.floor(_this.haveload/_this.total*100);
+            onEveryLoad(_this.percent);
+            this.onload = null;
+
+            if(_this.percent == 100){
+                _this.complete = true;
+                onComplete(result)
+                return;
+            }
+            var img = new Image();
+            img.onload = onLoad;
+            img.src = urls[_this.haveload].url+_this.version;
+
+
+        }
+
+        function start(){
+            var img = new Image();
+            img.onload = onLoad;
+            img.src = urls[_this.haveload].url+_this.version;
+        }
+
+    }
+
+});
+var Media = new function(){
+    this.mutedEnd = false;
+    this.WxMediaInit=function(){
+
+        var _self = this;
+        if(!Utils.browser("weixin")){
+            this.mutedEnd = true;
+            return;
+        }
+        if(!Utils.browser("iPhone")){
+            _self.mutedEnd = true;
+            return;
+        }
+        document.addEventListener("WeixinJSBridgeReady",function(){
+            var $media = $(".iosPreload");
+            $.each($media,function(index,value){
+                _self.MutedPlay(value["id"]);
+                if(index+1==$media.length){
+                    _self.mutedEnd = true;
+                }
+            });
+        },false)
+    };
+    this.MutedPlay=function(string){
+        var str = string.split(",");//id数组
+        var f = function(id){
+            var media = Utils.g(id);
+            media.volume = 0;
+            media.play();
+            // setTimeout(function(){
+            media.pause();
+            media.volume = 1;
+            media.currentTime = 0;
+            // },100)
+        };
+        if(!(str.length-1)){
+            f(str[0]);
+            return 0;
+        }
+        str.forEach(function(value,index){
+            f(value);
+        })
+    };
+    this.playMedia=function(id){
+        var _self = this;
+        var clock = setInterval(function(){
+            if(_self.mutedEnd){
+                Utils.g(id).play()
+                clearInterval(clock);
+            }
+        },20)
+    };
+};
 Media.WxMediaInit();
+
 var options = {
     el:"#iCreative",
     data:{
@@ -200,21 +275,20 @@ var options = {
             goRegist : !!parseInt($("#goRegist").val()),//出去注册了一下
             haveFill : !!parseInt($("#haveFill").val()),//是否填写过中奖信息
             prizeType:parseInt($("#prizeType").val()),//奖品类型
-
             province:[
-                {province:"江西省"},
-                {province:"浙江省"},
-                {province:"江苏省"}
+                // {province:"江西省"},
+                // {province:"浙江省"},
+                // {province:"江苏省"}
             ],
             city:[
-                {city:"杭州市"},
-                {city:"嘉兴市"},
-                {city:"温州市"}
+                // {city:"杭州市"},
+                // {city:"嘉兴市"},
+                // {city:"温州市"}
             ],
             address:[
-                {id:"1",name:"门店名称"},
-                {id:"2",name:"门店名称"},
-                {id:"3",name:"门店名称"}
+                // {id:"1",name:"门店名称"},
+                // {id:"2",name:"门店名称"},
+                // {id:"3",name:"门店名称"}
             ],
             name:'',
             tel:'',
@@ -223,17 +297,16 @@ var options = {
             select_city:'',
             select_address:'',
             shop_id:0,
-
             myInfo:{
                 province:"",
                 city:"",
                 shop:"",
             },
         },
-
+        ios:Utils.browser("ios"),
         /*页面切换控制*/
         ploading:{
-            visible:true,
+            visible:false,
         },
         pwebgl:{
             visible:false,
@@ -244,13 +317,10 @@ var options = {
         p2:{
             visible:false,
         },
+        pprize:{
+            visible:false,
+        },
         pfill:{
-            visible:false,
-        },
-        pend:{
-            visible:false,
-        },
-        pquery:{
             visible:false,
         },
         paddress:{
@@ -259,9 +329,39 @@ var options = {
         pvideo:{
             visible:false,
         },
+        pend:{
+            visible:false,
+        },
+        pshare:{
+            visible:false,
+        },
+        pquery:{
+            visible:false,
+        },
+        pguanzhu:{
+            visible:false,
+        },
         prule:{
             visible:false,
         },
+
+        palert:{
+            visible:false,
+            type:"",
+            choice:{
+                fill:"fill",
+                normal:"normal",
+                reg:"reg",
+            },
+            fontSize:"",
+            content:"",//主文字
+            title:"",//标题
+            txt: {
+                fill:"你还未填写领奖信息，<br>赶快去填写吧",
+                reg:"为了确保星球领奖者的真实性,<br>系统需要进行实名认证,<br>请填写个人真实信息领取奖品!"
+            }
+        },
+        isResult:false,
         hpwarn:{
             visible:false,
         },
@@ -389,23 +489,28 @@ var main = new function(){
     this.picUrl = this.assetsUrl + "images/";//图片路径
     this.ImageList = [
         {
-            url:picUrl+"weile.png",
+            url:this.picUrl+"weile.png",
             group:"clouds"
         }, {
-            url:picUrl+"phone.png",
+            url:this.picUrl+"phone.png",
             group:"scene"
         }
     ];
 
     this.RAF = undefined;
-
-
 };
 /***********************流程***********************/
 main.init=function(){
 
 };
 main.start=function(){
+    var loader = new ImageLoader();
+
+    loader.load(this.ImageList,function(progress){
+        console.log(progress)
+    },function(result){
+        console.log(result)
+    });
 
 };
 main.loadCallBack = function(){};
@@ -472,6 +577,7 @@ main.addEvent=function(){
 /***********************功能***********************/
 
 main.addEvent();
+main.init();
 
 
 
