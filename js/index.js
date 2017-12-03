@@ -555,15 +555,6 @@ main.prulelaeve = function(){
 /***********************流程***********************/
 
 /***********************功能***********************/
-main.scrollInit=function(selector){
-    this.touch.ScrollObj = $(selector);
-    this.touch.container = $(selector).parent();
-    this.touch.StartY = 0;
-    this.touch.NewY = 0;
-    this.touch.addY = 0;
-    this.touch.scrollY = 0;
-    this.touch.limitDown = this.touch.ScrollObj.height() < this.touch.container.height() ? 0 :(this.touch.container.height()-this.touch.ScrollObj.height());
-};
 main.playbgm=function(){
     this.playMediaInWx(this.bgm.obj);
     this.bgm.button.addClass("ani-bgmRotate");
@@ -649,6 +640,16 @@ main.addEvent=function(){
 
 
     }
+
+    // $(window).on("orientationchange",function(e){
+    //     if(window.orientation == 0 || window.orientation == 180 ) {
+    //         vm.hpwarn.visible = false;
+    //     }
+    //     else if(window.orientation == 90 || window.orientation == -90) {
+    //         vm.hpwarn.visible = true;
+    //     }
+    // });
+
 };
 main.scrollInit = function(selector,start){
     this.touch.ScrollObj = $(selector);

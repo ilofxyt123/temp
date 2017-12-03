@@ -1,59 +1,61 @@
-var onJQAnimationEndHandle = function( option ){
-    switch( option.type ){
-        case "fadeIn":
-            this.removeClass("opacity "+option.ani);
-            break;
-        case "fadeOut":
-            this.hide().removeClass(option.ani);
-            break;
-    }
-    if(option.callback){
-        option.callback.call(this);
+!function(){
+    var onJQAnimationEndHandle = function( option ){
+        switch( option.type ){
+            case "fadeIn":
+                this.removeClass("opacity "+option.ani);
+                break;
+            case "fadeOut":
+                this.hide().removeClass(option.ani);
+                break;
+        }
+        if(option.callback){
+            option.callback.call(this);
+        };
+        this.off("webkitAnimationEnd").css({
+            animationDuration:""
+        });
     };
-    this.off("webkitAnimationEnd").css({
-        animationDuration:""
+    $.fn.extend({
+        fi:function(option){
+            var _this = this;
+            var options = {
+                ani:"ani-fadeIn",
+                duration:"500",
+                callback:undefined,
+                type:"fadeIn"
+            };
+            if(option){
+                jQuery.extend(options,option);
+            }
+            this.on("webkitAnimationEnd", function( e ){
+                e.stopPropagation();
+                onJQAnimationEndHandle.call(_this,options)
+            }).css({
+                animationDuration:options.duration+"ms",
+            }).addClass("opacity " + options.ani).show();
+            return this;
+        },
+        fo:function(option){
+            var _this = this;
+            var options = {
+                ani:"ani-fadeOut",
+                duration:"500",
+                callback:undefined,
+                type:"fadeOut"
+            };
+            if(option){
+                jQuery.extend(options,option);
+            }
+            this.on("webkitAnimationEnd",function( e ){
+                e.stopPropagation();
+                onJQAnimationEndHandle.call(_this,options)
+            }).css({
+                animationDuration:options.duration+"ms",
+            }).addClass(options.ani);
+            return this;
+        }
     });
-};
-$.fn.extend({
-    fi:function(option){
-        var _this = this;
-        var options = {
-            ani:"ani-fadeIn",
-            duration:"500",
-            callback:undefined,
-            type:"fadeIn"
-        };
-        if(option){
-            jQuery.extend(options,option);
-        }
-        this.on("webkitAnimationEnd", function( e ){
-            e.stopPropagation();
-            onJQAnimationEndHandle.call(_this,options)
-        }).css({
-            animationDuration:options.duration+"ms",
-        }).addClass("opacity " + options.ani).show();
-        return this;
-    },
-    fo:function(option){
-        var _this = this;
-        var options = {
-            ani:"ani-fadeOut",
-            duration:"500",
-            callback:undefined,
-            type:"fadeOut"
-        };
-        if(option){
-            jQuery.extend(options,option);
-        }
-        this.on("webkitAnimationEnd",function( e ){
-            e.stopPropagation();
-            onJQAnimationEndHandle.call(_this,options)
-        }).css({
-            animationDuration:options.duration+"ms",
-        }).addClass(options.ani);
-        return this;
-    }
-});
+}()
 if ( Object.assign === undefined ) {
 
     // Missing in IE
@@ -275,20 +277,21 @@ var options = {
             goRegist : !!parseInt($("#goRegist").val()),//出去注册了一下
             haveFill : !!parseInt($("#haveFill").val()),//是否填写过中奖信息
             prizeType:parseInt($("#prizeType").val()),//奖品类型
+
             province:[
-                // {province:"江西省"},
-                // {province:"浙江省"},
-                // {province:"江苏省"}
+                {province:"江西省"},
+                {province:"浙江省"},
+                {province:"江苏省"}
             ],
             city:[
-                // {city:"杭州市"},
-                // {city:"嘉兴市"},
-                // {city:"温州市"}
+                {city:"杭州市"},
+                {city:"嘉兴市"},
+                {city:"温州市"}
             ],
             address:[
-                // {id:"1",name:"门店名称"},
-                // {id:"2",name:"门店名称"},
-                // {id:"3",name:"门店名称"}
+                {id:"1",name:"门店名称"},
+                {id:"2",name:"门店名称"},
+                {id:"3",name:"门店名称"}
             ],
             name:'',
             tel:'',
@@ -297,17 +300,15 @@ var options = {
             select_city:'',
             select_address:'',
             shop_id:0,
+
             myInfo:{
                 province:"",
                 city:"",
                 shop:"",
             },
         },
-        ios:Utils.browser("ios"),
+
         /*页面切换控制*/
-        ploading:{
-            visible:false,
-        },
         pwebgl:{
             visible:false,
         },
@@ -317,10 +318,13 @@ var options = {
         p2:{
             visible:false,
         },
-        pprize:{
+        pfill:{
             visible:false,
         },
-        pfill:{
+        pend:{
+            visible:false,
+        },
+        pquery:{
             visible:false,
         },
         paddress:{
@@ -329,39 +333,9 @@ var options = {
         pvideo:{
             visible:false,
         },
-        pend:{
-            visible:false,
-        },
-        pshare:{
-            visible:false,
-        },
-        pquery:{
-            visible:false,
-        },
-        pguanzhu:{
-            visible:false,
-        },
         prule:{
             visible:false,
         },
-
-        palert:{
-            visible:false,
-            type:"",
-            choice:{
-                fill:"fill",
-                normal:"normal",
-                reg:"reg",
-            },
-            fontSize:"",
-            content:"",//主文字
-            title:"",//标题
-            txt: {
-                fill:"你还未填写领奖信息，<br>赶快去填写吧",
-                reg:"为了确保星球领奖者的真实性,<br>系统需要进行实名认证,<br>请填写个人真实信息领取奖品!"
-            }
-        },
-        isResult:false,
         hpwarn:{
             visible:false,
         },
@@ -369,128 +343,14 @@ var options = {
             visible:false,
         },
         /*页面切换控制*/
+        pages:{
+            p1:'p1',
+            p2:'p2',
+        },//可选的后退页
+        router:[],//管理后退栈
+
     },
     methods:{
-        /*活动规则*/
-        top_btn_rule:function(){
-            this.prule.visible = true;
-            if(!main.scroll){
-                main.scroll = new Scroll({
-                    container:".scroll-area",
-                    scrollObj:".scroller"
-                })
-            }
-        },
-        prule_btn_xx:function(){
-            this.prule.visible = false;
-        },
-        after_leave_rule:function(){
-            main.scroll.set( 0 );
-        },
-        after_enter_rule:function(){
-            main.scroll.update();
-        },
-
-        /*webgl*/
-        onPwebglEnter:function(){
-            main.initLX({
-                container:$(".P_webgl"),
-                delay:3000
-            });
-            main.initLX({
-                container:$("#bg .bg2"),
-                delay:1500
-            })
-            if(vm.key_index==3&&vm.server_data.prizeType==0&&!vm.server_data.is_end){
-                $(".tip-all").show();
-                $(".big-icon").show();
-                $(".number").hide();
-                $(".animation-box").fi();
-            }
-        },
-        pwegbl_btn_chaxun:function(){
-            this.pquery.visible = true;
-        },
-        pwebgl_btn_getPrize:function(){
-            //关注
-            if(!this.server_data.have_guanzhu){
-                this.pguanzhu.visible = true;
-                this.pwebgl.visible = false;
-                main.stopRender();
-                return;
-            }
-            //vip
-            if(!this.server_data.isVip){
-                var type = vm.palert.choice.reg;
-                var content = vm.palert.txt[type];
-                vm.openAlert( type, content );
-                return;
-            }
-
-            if(this.server_data.is_end){
-                this.palert.type = this.palert.choice.normal;
-                this.palert.content = "本次活动已结束<br>期待EP雅莹更多活动<br>记得关注“EP雅莹官方微信”<br>敬请期待我们的下次活动";
-                this.palert.visible = true;
-                $(".animation-box").fo();
-                return;
-            }
-
-            var _vm = this;
-            var callback = function( data ){
-                if( data.status ){
-                    _vm.server_data.prizeType = data.lottery_result;
-                    _vm.pprize.visible = true;
-                    _vm.pwebgl.visible = false;
-                    setTimeout(function(){
-                        $(".animation-box").hide();
-                    },1000)
-                    main.stopRender();
-                }else{
-                    console.log( "抽奖后台出问题了"+data )
-                }
-            };
-            _getData.getPrize( callback );
-        },
-        pwebgl_btn_icon4:function(){
-            var content = "活动结束，该奖品已过期<br>下次请尽早哦！"
-            this.openAlert("normal",content);
-        },
-
-        /*中奖结果页*/
-        afterEnterPprize:function(){
-            this.isResult = true;
-            init_weixin_share();
-        },
-        afterLeavePprize:function(){
-            this.isResult = false;
-            init_weixin_share()
-        },
-        pprize_btn_paddress:function(){
-            this.paddress.visible = true;
-        },/*中奖结果页*/
-        pprize_btn_share:function(){
-            this.pshare.visible = true;
-        },
-        pprize_btn_pfill:function(){
-            this.pfill.visible = true;
-            this.pprize.visible = false;
-        },
-        pprize_btn_close:function(){
-            main.startRender();
-            this.pprize.visible = false;
-            this.pwebgl.visible = true;
-        },
-        /*中奖查询页*/
-        pquery_btn_paddress:function(){
-            this.paddress.visible = true;
-        },
-        pquery_btn_share:function(){
-            this.pshare.visible = true;
-        },
-        pquery_btn_xx:function(){
-            this.pquery.visible = false;
-        },
-
         /*提交信息页*/
         pfill_btn_submit:function(){
             var number = this.server_data.tel;
@@ -498,82 +358,56 @@ var options = {
             var patt = /^1(3|4|5|7|8)\d{9}$/;
 
             if(name == ""){
-                this.palert.type = this.palert.choice.normal;
-                this.palert.content = "请输入姓名";
-                this.palert.visible = true;
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请输入姓名";
+                this.pmask.visible = true;
                 return;
             };
             if(!(patt.test(number))){
-                this.palert.type = this.palert.choice.normal;
-                this.palert.content = "请输入正确的手机号";
-                this.palert.visible = true;
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请输入正确的手机号";
+                this.pmask.visible = true;
                 return;
             };
             if(this.server_data.select_province == ""){
-                this.palert.type = this.palert.choice.normal;
-                this.palert.content = "请选择省份";
-                this.palert.visible = true;
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请选择省份";
+                this.pmask.visible = true;
                 return;
             }
             if(this.server_data.select_city == ""){
-                this.palert.type = this.palert.choice.normal;
-                this.palert.content = "请选择城市";
-                this.palert.visible = true;
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请选择城市";
+                this.pmask.visible = true;
                 return;
             }
             if(this.server_data.select_address == ""){
-                this.palert.type = this.palert.choice.normal;
-                this.palert.content = "请选择门店";
-                this.palert.visible = true;
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请选择门店";
+                this.pmask.visible = true;
                 return;
             }
 
-            var callback = function( result ){
-                if(result.status){
-                    location.href = "index.php";
-                }else{
-                    console.log(result)
-                }
-            }
-            _uploadData.addInfo( callback );
+            _uploadData.fillInfo();
 
         },
         onPfillProvinceChangeHandle:function(e){
-            var _vm = this;
-            _getData.getCity(function(data){
-                _vm.server_data.city = data.data
-            })
+            console.log(this.server_data.select_province)
+            // _getData.getCity(this.server_data.select_province)
         },
         onPfillCityChangeHandle:function(e){
-            var _vm = this;
-            _getData.getShop(function(data){
-                _vm.server_data.address = data.data
-            })
+            console.log(this.server_data.select_city)
+            // _getData.getAddress(this.server_data.select_city)
         },
         onPfillAddressChangeHandle:function(e){
             this.server_data.shop_id = e.target.selectedOptions[0].getAttribute("shopid");
+            console.log(this.server_data.select_address)
         },
 
         /*查询可使用门店页*/
         onPaddress_btn_xx:function(){
             this.paddress.visible = false;
         },
-        onPaddressProvinceChangeHandle:function(e){
-            var _vm = this;
-            _getData.getCity(function(data){
-                _vm.server_data.city = data.data
-            })
-        },
-        onPaddressCityChangeHandle:function(e){
-            var _vm = this;
-            _getData.getShop(function(data){
-                _vm.server_data.address = data.data
-            })
-        },
-        onPaddressAddressChangeHandle:function(e){
-
-        },
-
 
         /*后退*/
         back:function(){
@@ -583,39 +417,7 @@ var options = {
                 this[page].visible = true;
                 this.router.splice(len-1,1)
             }
-        },
-
-        /*alert页面*/
-        palert_btn_gofill:function(){
-            this.pfill.visible = true;
-            this.closeAlert();
-        },
-        palert_btn_goregist:function(){
-            var back_url = "http://epshow.i-creative.cn/summer/index.php?is_reg=1";
-            location.href = "http://o2o.elegant-prosper.com/EPWXSiteNew/VIP/CreateVIP?sid=cfe404ea-fe5b-4a85-87f0-b2701929462c&redirect_uri="+encodeURIComponent(back_url);
-        },
-        onPshareEnter:function(){
-            // main.initLX({
-            //     container:$(".P_share"),
-            //     delay:1000
-            // })
-        },
-        openAlert:function(type,content,fontSize){
-            var fontSize = fontSize?fontSize:"";
-            this.palert.type = type;
-            this.palert.content = content;
-            this.palert.visible = true;
-            this.palert.fontSize = fontSize;
-        },
-        closeAlert:function(){
-            this.palert.visible = false;
-            this.palert.type = "";
-            this.palert.content = "";
-            this.palert.fontSize = "";
-        },
-    },
-    computed:{
-
+        }
     },
     delimiters: ['$[', ']']
 }
@@ -1370,6 +1172,7 @@ webgl.render = function(){
 
 var main = new function(){
 
+    this.ios = Utils.browser("ios")
     this.touch ={
         ScrollObj:undefined,
         isScroll:false,
@@ -1405,41 +1208,21 @@ var main = new function(){
         obj:document.getElementById("video")
     };
 
-    this.assetsUrl = "assets/";
+    this.isOnline = false;
+    this.version = "";
+
+    this.cdnUrl = "";
+    this.assetsUrl = this.isOnline ? this.cdnUrl + "assets/" : "assets/";
     this.picUrl = this.assetsUrl + "images/";//图片路径
+    this.videoUrl = this.assetsUrl + "video/"
+
     this.ImageList = [
         {
-            url:this.picUrl+"bg.jpg",
-            group:"1"
-        }, {
-            url:this.picUrl+"p6-kuang.png",
-            group:"1"
+            url:this.picUrl+"bg.jpg" + this.version,
+            group:"0"
         },
-        {
-            url:this.picUrl+"p11-btn.png",
-            group:"1"
-        },
-        {
-            url:this.picUrl+"p11-kuang.png",
-            group:"1"
-        },
-        {
-            url:this.picUrl+"pfill-title.png",
-            group:"1"
-        },
-        {
-            url:this.picUrl+"pfill-txt-3.png",
-            group:"1"
-        },
-        {
-            url:this.picUrl+"phone.png",
-            group:"1"
-        },
-        {
-            url:this.picUrl+"weile.png",
-            group:"1"
-        },
-    ];
+    ]
+    this.ImageResult = {};
 
     this.RAF = undefined;
 };
@@ -1449,13 +1232,27 @@ main.init=function(){
     webgl.init();
 };
 main.start=function(){
-    var loader = new Utils.ImageLoader();
 
-    loader.load(this.ImageList,function( percent ){
+    var loader = new Utils.ImageLoader();
+    var _this = this;
+
+    loader.load( _this.ImageList, onProgress, onLoad )
+
+    function onProgress( percent ) {
+
         console.log( percent )
-    },function( result ){
-        console.log( result )
-    });
+
+    }
+    function onLoad( result ) {
+
+        setTimeout(function(){
+
+            _this.ImageResult = result
+            _this.loadCallBack()
+
+        },500)
+
+    }
 
 };
 main.loadCallBack = function(){
@@ -1473,15 +1270,6 @@ main.prulelaeve = function(){
 /***********************流程***********************/
 
 /***********************功能***********************/
-main.scrollInit=function(selector){
-    this.touch.ScrollObj = $(selector);
-    this.touch.container = $(selector).parent();
-    this.touch.StartY = 0;
-    this.touch.NewY = 0;
-    this.touch.addY = 0;
-    this.touch.scrollY = 0;
-    this.touch.limitDown = this.touch.ScrollObj.height() < this.touch.container.height() ? 0 :(this.touch.container.height()-this.touch.ScrollObj.height());
-};
 main.limitNum = function(obj){//限制11位手机号
     var value = obj.value;
     var length = value.length;
@@ -1493,7 +1281,7 @@ main.limitNum = function(obj){//限制11位手机号
     }
 };//限制手机号长度
 main.playbgm=function(){
-    Media.playMedia(this.bgm.id);
+    this.playMediaInWx(this.bgm.obj);
     this.bgm.button.addClass("ani-bgmRotate");
     this.bgm.isPlay = true;
 };
@@ -1512,15 +1300,125 @@ main.stopRender = function(){
     window.cancelAnimationFrame(main.RAF);
 };
 main.addEvent=function(){
-    $(window).on("orientationchange",function(e){
-        if(window.orientation == 0 || window.orientation == 180 ) {
-            vm.hpwarn.visible = false;
+
+    document.body.ontouchmove = function( e ){
+
+        e.preventDefault();
+
+    }
+
+    $( window ).resize( function() {
+
+        resetDom()
+
+    } )
+
+    resetDom()
+    function resetDom(){
+
+        var win_w = window.innerWidth,
+            win_h = window.innerHeight;
+
+        //竖屏
+        if( win_w < win_h ){
+
+            $(".qiangzhihengping").css({
+                width:win_h+"px",
+                height:win_w+"px",
+                transformOrigin:"left top",
+                transform:"translate3d("+ win_w +"px,0,0) rotate(90deg)"
+            })
+
+            $(".qiangzhishuping").css({
+                width:"100%",
+                height:"100%",
+                transformOrigin:"left top",
+                transform:""
+            })
+
+            $(".qiangzhihengping2").css({
+                width: win_h + "px",
+                transformOrigin: "left top",
+                transform: "translate3d(" + win_w + "px,0,0) rotate(90deg)"
+            });
+
         }
-        else if(window.orientation == 90 || window.orientation == -90) {
-            vm.hpwarn.visible = true;
+
+        //横屏
+        else {
+            $(".qiangzhihengping").css({
+                width:"100%",
+                height:"100%",
+                transformOrigin:"left top",
+                transform:""
+            })
+
+            $(".qiangzhishuping").css({
+                width:win_h+"px",
+                height:win_w+"px",
+                transformOrigin:"left top",
+                transform:"translate3d(0,"+ win_h +"px,0) rotate(-90deg)"
+            })
+
+            $(".qiangzhihengping2").css({width: "100%", transformOrigin: "left top", transform: ""});
         }
-    });
+
+
+    }
+
+    // $(window).on("orientationchange",function(e){
+    //     if(window.orientation == 0 || window.orientation == 180 ) {
+    //         vm.hpwarn.visible = false;
+    //     }
+    //     else if(window.orientation == 90 || window.orientation == -90) {
+    //         vm.hpwarn.visible = true;
+    //     }
+    // });
 };
+main.scrollInit = function(selector,start){
+    this.touch.ScrollObj = $(selector);
+    this.touch.container = $(selector).parent();
+    this.touch.StartY = 0;
+    this.touch.NewY = 0;
+    this.touch.addY = 0;
+    this.touch.scrollY = 0;
+    this.touch.limitDown = this.touch.ScrollObj.height()<this.touch.container.height()?0:(this.touch.container.height()-this.touch.ScrollObj.height());
+};
+main.playMediaInWx = (function( ){
+
+    var hasBind = false;
+
+    return function( dom ){
+
+        dom.currentTime = 0;
+
+        if( typeof WeixinJSBridge != "undefined" ){
+
+            WeixinJSBridge.invoke( "getNetworkType", {}, function () {
+
+                dom.play()
+
+            })
+
+        } else {
+
+            if( !hasBind ){
+
+                hasBind = true;
+                document.addEventListener("WeixinJSBridgeReady",function(){
+                    dom.play()
+                },false)
+
+            }
+
+
+            dom.play()
+
+        }
+
+    }
+
+})()
 /***********************功能***********************/
 
 main.addEvent();
