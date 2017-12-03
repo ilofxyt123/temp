@@ -304,14 +304,64 @@ Media.WxMediaInit();
 var options = {
     el:"#iCreative",
     data:{
-        debug:true,
-        server_data:{},
+        server_data:{
+            is_end : !!parseInt($("#is_end").val()),//活动是否结束
+            have_guanzhu : !!parseInt($("#have_guanzhu").val()),//是否关注了公众号
+            isVip : !!parseInt($("#is_vip").val()),//是否注册过
+            goRegist : !!parseInt($("#goRegist").val()),//出去注册了一下
+            haveFill : !!parseInt($("#haveFill").val()),//是否填写过中奖信息
+            prizeType:parseInt($("#prizeType").val()),//奖品类型
+
+            province:[
+                {province:"江西省"},
+                {province:"浙江省"},
+                {province:"江苏省"}
+            ],
+            city:[
+                {city:"杭州市"},
+                {city:"嘉兴市"},
+                {city:"温州市"}
+            ],
+            address:[
+                {id:"1",name:"门店名称"},
+                {id:"2",name:"门店名称"},
+                {id:"3",name:"门店名称"}
+            ],
+            name:'',
+            tel:'',
+
+            select_province:'',//视图上选中省份String,该字段即时更新
+            select_city:'',
+            select_address:'',
+            shop_id:0,
+
+            myInfo:{
+                province:"",
+                city:"",
+                shop:"",
+            },
+        },
 
         /*页面切换控制*/
+        pwebgl:{
+            visible:false,
+        },
         p1:{
             visible:false,
         },
         p2:{
+            visible:false,
+        },
+        pfill:{
+            visible:false,
+        },
+        pend:{
+            visible:false,
+        },
+        pquery:{
+            visible:false,
+        },
+        paddress:{
             visible:false,
         },
         pvideo:{
@@ -327,17 +377,88 @@ var options = {
             visible:false,
         },
         /*页面切换控制*/
-
+        pages:{
+            p1:'p1',
+            p2:'p2',
+        },//可选的后退页
+        router:[],//管理后退栈
 
     },
     methods:{
+                                            /*提交信息页*/
+        pfill_btn_submit:function(){
+            var number = this.server_data.tel;
+            var name = this.server_data.name;
+            var patt = /^1(3|4|5|7|8)\d{9}$/;
 
+            if(name == ""){
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请输入姓名";
+                this.pmask.visible = true;
+                return;
+            };
+            if(!(patt.test(number))){
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请输入正确的手机号";
+                this.pmask.visible = true;
+                return;
+            };
+            if(this.server_data.select_province == ""){
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请选择省份";
+                this.pmask.visible = true;
+                return;
+            }
+            if(this.server_data.select_city == ""){
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请选择城市";
+                this.pmask.visible = true;
+                return;
+            }
+            if(this.server_data.select_address == ""){
+                this.pmask.type = this.pmask.choice.normal;
+                this.pmask.content = "请选择门店";
+                this.pmask.visible = true;
+                return;
+            }
+
+            _uploadData.fillInfo();
+
+        },
+        onPfillProvinceChangeHandle:function(e){
+            console.log(this.server_data.select_province)
+            // _getData.getCity(this.server_data.select_province)
+        },
+        onPfillCityChangeHandle:function(e){
+            console.log(this.server_data.select_city)
+            // _getData.getAddress(this.server_data.select_city)
+        },
+        onPfillAddressChangeHandle:function(e){
+            this.server_data.shop_id = e.target.selectedOptions[0].getAttribute("shopid");
+            console.log(this.server_data.select_address)
+        },
+
+                                           /*查询可使用门店页*/
+        onPaddress_btn_xx:function(){
+            this.paddress.visible = false;
+        },
+
+                                           /*后退*/
+        back:function(){
+            var len = this.router.length;
+            if(len>0){
+                var page = this.router[len-1];
+                this[page].visible = true;
+                this.router.splice(len-1,1)
+            }
+        }
     },
     delimiters: ['$[', ']']
 }
-var vm = new Vue(options);
+var vm = new Vue( options );
 var main = new function(){
 
+    this.ios = Utils.browser("ios")
     this.touch ={
         ScrollObj:undefined,
         isScroll:false,
@@ -374,7 +495,7 @@ var main = new function(){
     };
 
     this.isOnline = false;
-    this.version = "?v1";
+    this.version = "";
 
     this.cdnUrl = "";
     this.assetsUrl = this.isOnline ? this.cdnUrl + "assets/" : "assets/";
@@ -383,7 +504,7 @@ var main = new function(){
 
     this.ImageList = [
         {
-            url:this.picUrl+"logo.jpg" + this.version,
+            url:this.picUrl+"bg.jpg" + this.version,
             group:"0"
         },
     ]
@@ -411,16 +532,12 @@ main.start=function(){
     }
     function onLoad( result ) {
 
-        _this.pages["ploading"].fo()
-        _this.pages["pvideo"].fi({
-            callback:function(){
+        setTimeout(function(){
 
-                _this.video.player.play()
+            _this.ImageResult = result
+            _this.loadCallBack()
 
-            }
-        })
-
-        _this.ImageResult = result
+        },500)
 
     }
 
@@ -448,7 +565,7 @@ main.scrollInit=function(selector){
     this.touch.limitDown = this.touch.ScrollObj.height() < this.touch.container.height() ? 0 :(this.touch.container.height()-this.touch.ScrollObj.height());
 };
 main.playbgm=function(){
-    Media.playMedia(this.bgm.id);
+    this.playMediaInWx(this.bgm.obj);
     this.bgm.button.addClass("ani-bgmRotate");
     this.bgm.isPlay = true;
 };
@@ -467,16 +584,6 @@ main.stopRender = function(){
     window.cancelAnimationFrame(main.RAF);
 };
 main.addEvent=function(){
-    // $(window).on("orientationchange",function(e){
-    //     if(window.orientation == 0 || window.orientation == 180 )
-    //     {
-    //         vm.hpwarn.visible = false;
-    //     }
-    //     else if(window.orientation == 90 || window.orientation == -90)
-    //     {
-    //         vm.hpwarn.visible = true;
-    //     }
-    // });
 
     document.body.ontouchmove = function( e ){
 
@@ -491,7 +598,6 @@ main.addEvent=function(){
     } )
 
     resetDom()
-
     function resetDom(){
 
         var win_w = window.innerWidth,
@@ -514,6 +620,12 @@ main.addEvent=function(){
                 transform:""
             })
 
+            $(".qiangzhihengping2").css({
+                width: win_h + "px",
+                transformOrigin: "left top",
+                transform: "translate3d(" + win_w + "px,0,0) rotate(90deg)"
+            });
+
         }
 
         //横屏
@@ -531,6 +643,8 @@ main.addEvent=function(){
                 transformOrigin:"left top",
                 transform:"translate3d(0,"+ win_h +"px,0) rotate(-90deg)"
             })
+
+            $(".qiangzhihengping2").css({width: "100%", transformOrigin: "left top", transform: ""});
         }
 
 

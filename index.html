@@ -27,15 +27,13 @@
 </head>
 <body>
 
+<!--loading-->
+<div class="container P_loading"></div>
+
 <div id="iCreative">
     <div class="container P_bg">
         <img src="assets/images/bg.jpg" class="bg-pic bg-pic1">
     </div>
-
-    <!--loading-->
-    <transition leave-active-class="ani-fadeOut">
-        <div class="container P_loading" v-show="ploading.visible"></div>
-    </transition>
 
     <!--WEBGL-->
     <transition enter-active-class="ani-fadeIn" leave-active-class="ani-fadeOut">
