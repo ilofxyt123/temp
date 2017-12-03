@@ -5,6 +5,7 @@ html,body{
     position: relative;
     margin:0 auto;
     background-color:white;
+    font-size:0.26rem;
 }
 img{position: absolute;}
 
@@ -38,6 +39,39 @@ img{position: absolute;}
         top:70%;
     }
 
+
+.input-box{width:100%;}
+    .input-box input{display:block;width:100%;height:0.6rem;border:none;outline:none;background-color:rgba(0,0,0,0);padding:0.17rem;text-align:center;margin:0;font-size:0.26rem;}
+    .input-box input::placeholder{color:#3f3f3f;text-align: left;font-size:0.26rem;}
+    .input-box input::-webkit-input-placeholder{color:#999;text-align: left;font-size:0.26rem;}
+    .input-box .name-box{}
+        .ui-input-name{}
+    .input-box .phone-box{}
+        .ui-input-phone{}
+.select-box{width:100%;height:1.4rem;position: relative;}
+        .select-box select{color:#3f3f3f;height:0.6rem;position: absolute;-webkit-appearance: none;border:none;outline:none;font-size:0.2rem;background-color:rgba(0,0,0,0);padding: 0 0 0 0.17rem;margin:0;}
+        .select-box .ui-select1{width:1.9rem;top:0;}
+        .select-box .ui-select2{width:100%;bottom:0;}
+
 #iCreative{width:100%;height:100%;position: relative;}
     .P_bg{}
         .bg-pic{width:6.4rem;}
+
+    .P_fill{}
+        .pfill-title{width:4.02rem;top:1.56rem;left:50%;margin-left:-2.01rem;}
+        .fill-box{width:3.88rem;height:3rem;position: absolute;left:50%;margin-left:-1.94rem;top:2.28rem;background-image: url("../assets/images/p11-kuang.png");background-repeat: no-repeat;background-size:100%;}
+            .fill-box .name-box{margin-bottom:0.2rem;}
+            .fill-box .select-box{margin-top:0.2rem;}
+                .fill-box .province{left:0;}
+                .fill-box .city{right:0;}
+        .pfill-tip{width:3.98rem;left:50%;margin-left:-1.99rem;top:5.8rem;}
+        .pfill-btn{width:3.08rem;left:50%;margin-left:-1.54rem;top:7.4rem;}
+
+    .P_address{background-color:rgba(0,0,0,0.8);z-index:101;}
+        .paddress-box{width:4.7rem;height:6.53rem;position: absolute;left:50%;margin-left:-2.35rem;top:1.65rem;}
+            .paddress-pic{width:100%;}
+            .paddress-box .select-box{width:3.58rem;height:1.28rem;position:absolute;left:50%;margin-left:-1.79rem;top:1.23rem;}
+                .paddress-xx{width:0.4rem;height:0.4rem;position:absolute;right:0.14rem;top:0.17rem;z-index:3;}
+                .paddress-box .province{width:1.72rem;height:0.54rem;left:0;}
+                .paddress-box .city{width:1.72rem;height:0.54rem;right:0;}
+                .paddress-box .address{height:0.54rem;}

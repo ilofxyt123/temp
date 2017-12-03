@@ -8,6 +8,7 @@
     <meta name="HandheldFriendly" content="true"/>
     <meta name="apple-touch-fullscreen" content="yes"/>
     <script src="js/resetRem.js"></script>
+<<<<<<< HEAD
 
     <link href="css/common.css" rel="stylesheet" type="text/css">
     <link href="css/index.css" rel="stylesheet" type="text/css">
@@ -23,27 +24,119 @@
         <!--css = '<'+'link '+'href='+"css/ganimate.css?v"+Math.random()+' rel='+"stylesheet "+'type='+"text/css"+'>';-->
         <!--document.write(css);-->
     <!--</script>-->
+=======
+    <script>
+        var css;
+        css = '<'+'link '+'href='+"css/common.css?v"+Math.random()+' rel='+"stylesheet "+'type='+"text/css"+'>';
+        document.write(css);
+        css = '<'+'link '+'href='+"css/index.css?v"+Math.random()+' rel='+"stylesheet "+'type='+"text/css"+'>';
+        document.write(css);
+        css = '<'+'link '+'href='+"css/animate.css?v"+Math.random()+' rel='+"stylesheet "+'type='+"text/css"+'>';
+        document.write(css);
+    </script>
+>>>>>>> b2d7b7ed2e1f08ead3767ff68e42e024cc0485ff
     <title>vue</title>
 </head>
 <body>
 
 <div id="iCreative">
     <div class="container P_bg">
-        <img src="images/bg.jpg" class="bg-pic bg-pic1">
+        <img src="assets/images/bg.jpg" class="bg-pic bg-pic1">
     </div>
-    <div class="container P_loading"></div>
 
+    <!--loading-->
+    <transition leave-active-class="ani-fadeOut">
+        <div class="container P_loading" v-show="ploading.visible"></div>
+    </transition>
 
+    <!--WEBGL-->
     <transition enter-active-class="ani-fadeIn" leave-active-class="ani-fadeOut">
-        <div class="container P_video animated" v-show="pvideo.visible">
+        <div id="WebGL" class="gl-container" v-show="pwebgl.visible">
+            <div id="FPS"></div>
+        </div>
+    </transition>
+
+    <!--信息填写页-->
+    <transition enter-active-class="ani-fadeIn" leave-active-class="ani-fadeOut">
+        <div class="container P_fill" v-show="pfill.visible" style="display:none;">
+            <img src="assets/images/pfill-title.png" class="pfill-title">
+            <div class="fill-box">
+                <div class="input-box">
+                    <div class="name-box">
+                        <input type="text" id="name" class="ui-input-name" placeholder="姓名" v-model="server_data.name">
+                    </div>
+                    <div class="phone-box">
+                        <input type="tel" id="phone" class="ui-input-phone" placeholder="手机" v-model="server_data.tel" oninput="main.limitNum(this)">
+                    </div>
+                </div>
+                <div class="select-box">
+                    <select class="ui-select1 province" @change="onPfillProvinceChangeHandle($event)" v-model="server_data.select_province">
+                        <option disabled value="">请选择省份</option>
+                        <option v-for="data in server_data.province">
+                            $[data.province]
+                        </option>
+                    </select>
+                    <select class="ui-select1 city" @change="onPfillCityChangeHandle($event)" v-model="server_data.select_city">
+                        <option disabled value="">请选择城市</option>
+                        <option v-for="data in server_data.city">
+                            $[data.city]
+                        </option>
+                    </select>
+                    <select class="ui-select2 address" @change="onPfillAddressChangeHandle($event)" v-model="server_data.select_address">
+                        <option disabled value="">请选择门店</option>
+                        <option v-for="data in server_data.address" v-bind:shopid="data.id">
+                            $[data.name]
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <img src="assets/images/pfill-txt-3.png" class="pfill-tip">
+            <img src="assets/images/p11-btn.png" class="pfill-btn" @touchend="pfill_btn_submit">
+        </div>
+    </transition>
+
+    <!--查看可使用门店-->
+    <transition enter-active-class="ani-fadeIn" leave-active-class="ani-fadeOut">
+        <div class="container P_address" v-show="paddress.visible" style="display:none;">
+            <div class="paddress-box ani-toBig">
+                <div class="paddress-xx" @touchend="onPaddress_btn_xx"></div>
+                <img src="assets/images/p6-kuang.png" class="paddress-pic">
+                <div class="select-box">
+                    <select class="ui-select1 province" @change="onPaddressProvinceChangeHandle($event)" v-model="server_data.select_province">
+                        <option disabled value="">请选择省份</option>
+                        <option v-for="data in server_data.province">
+                            $[data.province]
+                        </option>
+                    </select>
+                    <select class="ui-select1 city" @change="onPaddressCityChangeHandle($event)" v-model="server_data.select_city">
+                        <option disabled value="">请选择城市</option>
+                        <option v-for="data in server_data.city">
+                            $[data.city]
+                        </option>
+                    </select>
+                    <select class="ui-select2 address" @change="onPaddressAddressChangeHandle($event)" v-model="server_data.select_address">
+                        <option disabled value="">请选择门店</option>
+                        <option v-for="data in server_data.address" v-bind:shopid="data.id">
+                            $[data.name]
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+
+    <!--video-->
+    <transition enter-active-class="ani-fadeIn" leave-active-class="ani-fadeOut">
+        <div class="container P_video animated" v-show="pvideo.visible" style="display:none;">
             <video src="video/video.mp4?v51" id="video" width="100%" x-webkit-airplay="true" webkit-playsinline playsinline airplay="allow" x5-video-player-type="h5" class="iosPreload"></video>
         </div>
     </transition>
 
     <div class="hp" v-show="hpwarn.visible" style="display:none;">
         <div class="hp_box">
-            <img src="images/phone.png" class="phone">
-            <img src="images/weile.png" class="hp_tip">
+            <img src="assets/images/phone.png" class="phone">
+            <img src="assets/images/weile.png" class="hp_tip">
         </div>
     </div>
 
@@ -56,10 +149,24 @@
 
 <audio id="bgm" src="music/music.mp3?v1" preload="auto" loop="true" class="iosPreload"></audio>
 
+<input type="hidden" id="is_end" value="0" /><!--活动是否结束-->
+<input type="hidden" id="have_guanzhu" value="1" /><!--是否关注-->
+<input type="hidden" id="is_vip" value="1" /><!--是否是vip-->
+<input type="hidden" id="goRegist" value="0" /><!--刚才去注册了一下-->
+<input type="hidden" id="haveFill" value="0" /><!--是否填写过信息-->
 
 <script src="js/jquery-3.2.1.min.js"></script>
-<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="js/vue.js"></script>
+<!--<script src="js/three.js"></script>-->
+<!--<script src="js/OrbitControls.js"></script>-->
+<!--<script src="js/DeviceOrientationControls.js"></script>-->
+<!--<script src="js/MTLLoader.js"></script>-->
+<!--<script src="js/OBJLoader.js"></script>-->
+<!--<script src="js/DDSLoader.js"></script>-->
+<script src="js/TweenMax.js"></script>
+<!--<script src="js/Detector.js"></script>-->
+<!--<script src="js/stats.min.js"></script>-->
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     var js;
     js = '<' + 'script ' + 'src=' + "js/index.js?v" + Math.random() + '>' + '</' + 'script' + '>'
