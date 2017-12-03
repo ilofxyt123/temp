@@ -39,46 +39,46 @@
 .opacity.delay39,.animate.delay39 {-webkit-animation-delay: 3.9s;animation-delay: 3.9s;}
 .opacity.delay40,.animate.delay40 {-webkit-animation-delay: 4s;animation-delay: 4s;}
 
-.animate.ani-time01{  -webkit-animation-duration:0.1s;  animation-duration:0.1s;  }
-.animate.ani-time02{  -webkit-animation-duration:0.2s;  animation-duration:0.2s;  }
-.animate.ani-time03{  -webkit-animation-duration:0.3s;  animation-duration:0.3s;  }
-.animate.ani-time04{  -webkit-animation-duration:0.4s;  animation-duration:0.4s;  }
-.animate.ani-time05{  -webkit-animation-duration:0.5s;  animation-duration:0.5s;  }
-.animate.ani-time06{  -webkit-animation-duration:0.6s;  animation-duration:0.6s;  }
-.animate.ani-time07{  -webkit-animation-duration:0.7s;  animation-duration:0.7s;  }
-.animate.ani-time08{  -webkit-animation-duration:0.8s;  animation-duration:0.8s;  }
-.animate.ani-time09{  -webkit-animation-duration:0.9s;  animation-duration:0.9s;  }
-.animate.ani-time10{  -webkit-animation-duration:1s;  animation-duration:1s;  }
-.animate.ani-time11{  -webkit-animation-duration:1.1s;  animation-duration:1.1s;  }
-.animate.ani-time12{  -webkit-animation-duration:1.2s;  animation-duration:1.2s;  }
-.animate.ani-time13{  -webkit-animation-duration:1.3s;  animation-duration:1.3s;  }
-.animate.ani-time14{  -webkit-animation-duration:1.4s;  animation-duration:1.4s;  }
-.animate.ani-time15{  -webkit-animation-duration:1.5s;  animation-duration:1.5s;  }
-.animate.ani-time16{  -webkit-animation-duration:1.6s;  animation-duration:1.6s;  }
-.animate.ani-time17{  -webkit-animation-duration:1.7s;  animation-duration:1.7s;  }
-.animate.ani-time18{  -webkit-animation-duration:1.8s;  animation-duration:1.8s;  }
-.animate.ani-time19{  -webkit-animation-duration:1.9s;  animation-duration:1.9s;  }
-.animate.ani-time20{  -webkit-animation-duration:2s;  animation-duration:2s;  }
-.animate.ani-time21{  -webkit-animation-duration:2.1s;  animation-duration:2.1s;  }
-.animate.ani-time22{  -webkit-animation-duration:2.2s;  animation-duration:2.2s;  }
-.animate.ani-time23{  -webkit-animation-duration:2.3s;  animation-duration:2.3s;  }
-.animate.ani-time24{  -webkit-animation-duration:2.4s;  animation-duration:2.4s;  }
-.animate.ani-time25{  -webkit-animation-duration:2.5s;  animation-duration:2.5s;  }
-.animate.ani-time26{  -webkit-animation-duration:2.6s;  animation-duration:2.6s;  }
-.animate.ani-time27{  -webkit-animation-duration:2.7s;  animation-duration:2.7s;  }
-.animate.ani-time28{  -webkit-animation-duration:2.8s;  animation-duration:2.8s;  }
-.animate.ani-time29{  -webkit-animation-duration:2.9s;  animation-duration:2.9s;  }
-.animate.ani-time30{  -webkit-animation-duration:3s;  animation-duration:3s;  }
-.animate.ani-time31{  -webkit-animation-duration:3.1s;  animation-duration:3.1s;  }
-.animate.ani-time32{  -webkit-animation-duration:3.2s;  animation-duration:3.2s;  }
-.animate.ani-time33{  -webkit-animation-duration:3.3s;  animation-duration:3.3s;  }
-.animate.ani-time34{  -webkit-animation-duration:3.4s;  animation-duration:3.4s;  }
-.animate.ani-time35{  -webkit-animation-duration:3.5s;  animation-duration:3.5s;  }
-.animate.ani-time36{  -webkit-animation-duration:3.6s;  animation-duration:3.6s;  }
-.animate.ani-time37{  -webkit-animation-duration:3.7s;  animation-duration:3.7s;  }
-.animate.ani-time38{  -webkit-animation-duration:3.8s;  animation-duration:3.8s;  }
-.animate.ani-time39{  -webkit-animation-duration:3.9s;  animation-duration:3.9s;  }
-.animate.ani-time40{  -webkit-animation-duration:4s;  animation-duration:4s;  }
+.opacity.ani-time01,.animate.ani-time01{  -webkit-animation-duration:0.1s;  animation-duration:0.1s;  }
+.opacity.ani-time02,.animate.ani-time02{  -webkit-animation-duration:0.2s;  animation-duration:0.2s;  }
+.opacity.ani-time03,.animate.ani-time03{  -webkit-animation-duration:0.3s;  animation-duration:0.3s;  }
+.opacity.ani-time04,.animate.ani-time04{  -webkit-animation-duration:0.4s;  animation-duration:0.4s;  }
+.opacity.ani-time05,.animate.ani-time05{  -webkit-animation-duration:0.5s;  animation-duration:0.5s;  }
+.opacity.ani-time06,.animate.ani-time06{  -webkit-animation-duration:0.6s;  animation-duration:0.6s;  }
+.opacity.ani-time07,.animate.ani-time07{  -webkit-animation-duration:0.7s;  animation-duration:0.7s;  }
+.opacity.ani-time08,.animate.ani-time08{  -webkit-animation-duration:0.8s;  animation-duration:0.8s;  }
+.opacity.ani-time09,.animate.ani-time09{  -webkit-animation-duration:0.9s;  animation-duration:0.9s;  }
+.opacity.ani-time10,.animate.ani-time10{  -webkit-animation-duration:1s;  animation-duration:1s;  }
+.opacity.ani-time11,.animate.ani-time11{  -webkit-animation-duration:1.1s;  animation-duration:1.1s;  }
+.opacity.ani-time12,.animate.ani-time12{  -webkit-animation-duration:1.2s;  animation-duration:1.2s;  }
+.opacity.ani-time13,.animate.ani-time13{  -webkit-animation-duration:1.3s;  animation-duration:1.3s;  }
+.opacity.ani-time14,.animate.ani-time14{  -webkit-animation-duration:1.4s;  animation-duration:1.4s;  }
+.opacity.ani-time15,.animate.ani-time15{  -webkit-animation-duration:1.5s;  animation-duration:1.5s;  }
+.opacity.ani-time16,.animate.ani-time16{  -webkit-animation-duration:1.6s;  animation-duration:1.6s;  }
+.opacity.ani-time17,.animate.ani-time17{  -webkit-animation-duration:1.7s;  animation-duration:1.7s;  }
+.opacity.ani-time18,.animate.ani-time18{  -webkit-animation-duration:1.8s;  animation-duration:1.8s;  }
+.opacity.ani-time19,.animate.ani-time19{  -webkit-animation-duration:1.9s;  animation-duration:1.9s;  }
+.opacity.ani-time20,.animate.ani-time20{  -webkit-animation-duration:2s;  animation-duration:2s;  }
+.opacity.ani-time21,.animate.ani-time21{  -webkit-animation-duration:2.1s;  animation-duration:2.1s;  }
+.opacity.ani-time22,.animate.ani-time22{  -webkit-animation-duration:2.2s;  animation-duration:2.2s;  }
+.opacity.ani-time23,.animate.ani-time23{  -webkit-animation-duration:2.3s;  animation-duration:2.3s;  }
+.opacity.ani-time24,.animate.ani-time24{  -webkit-animation-duration:2.4s;  animation-duration:2.4s;  }
+.opacity.ani-time25,.animate.ani-time25{  -webkit-animation-duration:2.5s;  animation-duration:2.5s;  }
+.opacity.ani-time26,.animate.ani-time26{  -webkit-animation-duration:2.6s;  animation-duration:2.6s;  }
+.opacity.ani-time27,.animate.ani-time27{  -webkit-animation-duration:2.7s;  animation-duration:2.7s;  }
+.opacity.ani-time28,.animate.ani-time28{  -webkit-animation-duration:2.8s;  animation-duration:2.8s;  }
+.opacity.ani-time29,.animate.ani-time29{  -webkit-animation-duration:2.9s;  animation-duration:2.9s;  }
+.opacity.ani-time30,.animate.ani-time30{  -webkit-animation-duration:3s;  animation-duration:3s;  }
+.opacity.ani-time31,.animate.ani-time31{  -webkit-animation-duration:3.1s;  animation-duration:3.1s;  }
+.opacity.ani-time32,.animate.ani-time32{  -webkit-animation-duration:3.2s;  animation-duration:3.2s;  }
+.opacity.ani-time33,.animate.ani-time33{  -webkit-animation-duration:3.3s;  animation-duration:3.3s;  }
+.opacity.ani-time34,.animate.ani-time34{  -webkit-animation-duration:3.4s;  animation-duration:3.4s;  }
+.opacity.ani-time35,.animate.ani-time35{  -webkit-animation-duration:3.5s;  animation-duration:3.5s;  }
+.opacity.ani-time36,.animate.ani-time36{  -webkit-animation-duration:3.6s;  animation-duration:3.6s;  }
+.opacity.ani-time37,.animate.ani-time37{  -webkit-animation-duration:3.7s;  animation-duration:3.7s;  }
+.opacity.ani-time38,.animate.ani-time38{  -webkit-animation-duration:3.8s;  animation-duration:3.8s;  }
+.opacity.ani-time39,.animate.ani-time39{  -webkit-animation-duration:3.9s;  animation-duration:3.9s;  }
+.opacity.ani-time40,.animate.ani-time40{  -webkit-animation-duration:4s;  animation-duration:4s;  }
 
 .animate.ani-pause{
     -webkit-animation-play-state: paused;
@@ -170,7 +170,7 @@
 
 .ani-fadeIn {
     -webkit-animation:ani-fadeIn 0.5s linear  1  forwards;
-    animation:ani-fadeIn 0.5s linear 1 forwards;
+    /* animation:ani-fadeIn 0.5s linear 1 forwards; */
 }
 .ani-fadeIn300 {
     -webkit-animation:ani-fadeIn 0.3s linear  1  forwards;
@@ -220,6 +220,9 @@
 }
 
 .ani-bgmRotate{
-    -webkit-animation:ani-bgmRotate 1s linear 0s infinite forwards;
-    animation:ani-bgmRotate 1s linear 0s infinite forwards;
+    -webkit-animation:ani-bgmRotate 3s linear 0s infinite forwards;
+    animation:ani-bgmRotate 3s linear 0s infinite forwards;
 }
+
+
+
