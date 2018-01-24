@@ -5,14 +5,22 @@
 
     var setSize = function() {
 
-        var standard = 640;
+        var standard  = 750;
 
-        var _width = window.innerWidth;
+        var _width    = window.innerWidth;
+        var _height   = window.innerHeight;
 
-        if( _width >= 640 ){
-            standard = 1136
-        }else{
-            standard = 640
+        //横屏的standard
+        if( _width >= _height ){
+
+            standard = 1334
+
+        }
+        //竖屏的standard
+        else {
+
+            standard = 750
+
         }
         var size = ( _width / standard ) * 100;
         document.documentElement.style.fontSize = size + 'px';
@@ -23,7 +31,7 @@
 
     window.addEventListener( "resize", function(){
 
-        setSize();
+        // setSize();
 
     } )
 
