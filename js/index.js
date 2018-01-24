@@ -219,16 +219,8 @@ Object.assign( Utils.ImageLoader.prototype,{
                 onComplete(result)
                 return;
             }
-            var img = new Image();
-            img.onload = onLoad;
-            img.src = urls[_this.haveload].url
 
-            if( urls[_this.haveload].name ){
-                img["name"] = urls[_this.haveload].name
-            }
-            if( urls[_this.haveload].direction ){
-                img["direction"] = urls[_this.haveload].direction
-            }
+            start()
 
         }
 
